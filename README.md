@@ -1,16 +1,17 @@
 # Time-Series-Forecasting-Electricity-Demand
 
-## Table of Contents
+## **Table of Contents**
 
 - [Introduction](#introduction)
 - [What is Time Series Forecasting?](#what-is-time-series-forecasting)
 - [Project Overview](#project-overview)
+- [Machine Learning Methods](#machine-learning-methods)
 - [Installation](#installation)
 - [Usage Code](#usage)
 - [How to Use Optuna?](#how-to-use-optuna)
 
 
-## Introduction
+## **Introduction**
 
 The electricity demand project focuses on predicting energy consumption, utilizing a dataset covering the years 2014, 2015, 2016, and 2017. The dataset encompasses hourly records and includes various environmental features alongside the electricity demand. The task involves forecasting the electricity demand for the initial three months of 2018.
 
@@ -26,10 +27,10 @@ The dataset consists of several columns providing diverse environmental factors:
 - **cloud_cover**: Percentage of cloud cover.
 - **air_density**: Air density during the specific hour.
 - **demand**: The electricity demand recorded for each hour.
-- 
+
 The objective of this project is to employ machine learning techniques to build models that can accurately forecast the electricity demand for the first quarter of 2018, based on historical patterns and the provided environmental data.
 
-## What is Time-Series-Forecasting?
+## **What is Time-Series-Forecasting?**
 
 Time series forecasting is a statistical technique used to predict future data points based on previously observed values in a chronological sequence. It's specifically designed for data that is collected and indexed in time order, such as hourly, daily, monthly, or yearly intervals.
 
@@ -38,3 +39,82 @@ The primary goal of time series forecasting is to uncover patterns, trends, and 
 Various methods, including statistical models and machine learning algorithms, are employed in time series forecasting. These methods utilize historical data to develop models that capture the underlying structure of the time series. The models are then used to forecast future values, enabling businesses and analysts to make informed decisions, plan resources, and anticipate future trends based on past observations.
 
 Overall, time series forecasting plays a vital role in numerous fields, including finance, economics, weather forecasting, inventory management, and many others, aiding in making accurate predictions and facilitating strategic decision-making processes.
+
+## **Project Overview**
+
+> ### Dataset Descriptive Analysis
+
+Utilized describe_dataset function to generate descriptive statistics such as **mean**, **standard deviation**, **percentiles**, etc., providing an overview of the dataset.
+Analyzed the descriptive statistics to understand the distribution and characteristics of the data.
+
+> ### Missing Values Handling
+
+- Employed the **check_missing_values** function to assess and visualize missing values in the dataset.
+- Presented missing values as a percentage and visualized using horizontal bar plots for better comprehension.
+
+> ### Correlation Analysis
+
+- Conducted a correlation matrix using the **correlation_matrix** function to explore relationships among numerical features.
+- Visualized the correlation matrix as a heatmap to identify correlated features within the dataset.
+
+> ### Data Summary
+
+- Executed the **grab_col_names** function to categorize features based on data type and unique value counts.
+- Reported the number of **observations**, **variables**, **categorical columns**, and **numerical columns** to provide an overview of the dataset's composition.
+
+> ### Data Distribution Visualization
+
+- Utilized **boxplot** and **hist_plot** functions to visualize the distribution and characteristics of numerical features.
+- Displayed box plots and histograms to identify **outliers**, **distributions**, and central tendencies in the data.
+
+> ### Outlier Detection
+
+- Implemented **check_outlier** and **OutlierDetection** functions to identify outliers within numerical columns.
+- Applied **Isolation Forest** and **Local Outlier Factor (LOF)** algorithms to detect and mark anomalies in the dataset, if enabled.
+
+> ### Datetime Feature Engineering
+
+- Applied **datetime_process** to convert a specified date column to datetime format.
+- Extracted various date and time-related features such as **year**, **quarter**, **month**, **week**, etc., for further analysis or modeling.
+
+## **Machine Learning Methods**
+
+The following machine learning methods have been implemented and applied to the dataset:
+
+> ### Scaler Processing
+
+- Utilized the Scaler class to scale numerical features in the dataset.
+- Implemented **MinMaxScaler**, **StandardScaler**, and **RobustScaler** based on the configuration settings.
+
+> ### Optuna Hyperparameter Optimization
+
+- Utilized the Optuna class to perform hyperparameter optimization using Optuna library.
+The optimization process is executed for the following regression models:
+- HistGradientBoostingRegressor
+- LGBMRegressor
+- XGBRegressor
+- CatBoostRegressor
+
+Hyperparameter ranges and optimization objectives are tailored for each model.
+
+> ### Machine Learning Model Training
+
+The MLModels class is employed to train and evaluate machine learning models based on the best parameters obtained from the Optuna optimization.
+The following models are considered:
+
+- HistGradientBoostingRegressor
+- LGBMRegressor
+- XGBRegressor
+- CatBoostRegressor
+
+> ### Model Evaluation Metrics
+
+- Evaluated the performance of the trained models using various metrics such as **Root Mean Squared Error (RMSE)**, **R-squared (R2)**, and **Mean Absolute Error (MAE)**.
+- Displayed the results for each model, showcasing their effectiveness in predicting the target variable.
+
+> ### Model Summary
+
+- Summarized the functionality of each model and their corresponding evaluation metrics.
+- Provided an overview of the machine learning methods applied to the dataset for regression tasks.
+
+**Note:** All processes are enabled or disabled based on the configuration settings, allowing for flexibility in the analysis and model training pipeline.
