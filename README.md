@@ -9,7 +9,6 @@
 - [Deep Learning Methods](#deep-learning-methods)
 - [Installation](#installation)
 - [Usage Code](#usage)
-- [How to Use Optuna?](#how-to-use-optuna)
 
 
 ## **Introduction**
@@ -238,4 +237,60 @@ Here's an example for optimizing the AUC score with XGBoost:
 
       best_params = study.best_params
 
-- You can then use these best hyperparameters to train your final model with XGBoost, LGBM, or CatBoost.
+>> ### How to Use Keras-Tuner?
+
+**Define Model**
+
+         def build_lstm_model(hp, X):
+             """
+             Builds an LSTM model with hyperparameters.
+             
+             Args:
+             - hp: Hyperparameters to be tuned by the optimization process.
+             - X: Input data shape.
+             
+             Returns:
+             - LSTM model architecture compiled with specified optimizer and loss.
+             """
+         
+             model = tf.keras.models.Sequential()
+             model.add(tf.keras.layers.LSTM(units=hp.Int('units', min_value=64, max_value=256, step=64), 
+                                            return_sequences=True, 
+                                            input_shape=(X.shape[1], X.shape[2]),
+                                            kernel_regularizer=tf.keras.regularizers.l2(hp.Choice('l2_rate', values=[0.001, 0.01, 0.1]))))
+             # Add a dropout layer
+             model.add(tf.keras.layers.Dropout(hp.Float('dropout', min_value=0.1, max_value=0.3, step=0.1)))
+             # Add another LSTM layer
+             model.add(tf.keras.layers.LSTM(units=int(hp.Int('units', min_value=64, max_value=256, step=64)) // 2, 
+                                            return_sequences=True, 
+                                            activation='relu',
+                                            kernel_regularizer=tf.keras.regularizers.l2(hp.Choice('l2_rate', values=[0.001, 0.01, 0.1]))))
+             model.add(tf.keras.layers.Dropout(hp.Float('dropout', min_value=0.1, max_value=0.3, step=0.1)))
+             # Final LSTM layer with units reduced to 1
+             model.add(tf.keras.layers.LSTM(units=int(hp.Int('units', min_value=64, max_value=256, step=64)) // 4, 
+                                            activation='relu',
+                                            kernel_regularizer=tf.keras.regularizers.l2(hp.Choice('l2_rate', values=[0.001, 0.01, 0.1]))))
+             # Output layer
+             model.add(tf.keras.layers.Dense(units=1)) 
+         
+             # Compile the model
+             optimizer = tf.keras.optimizers.Adam(learning_rate=hp.Choice('learning_rate', values=[1e-4, 1e-3, 1e-2]))
+             model.compile(optimizer=optimizer, loss='mean_squared_error')
+             return model
+
+
+
+**Define Keras-Tuner Function**
+```
+tuner = RandomSearch(lambda hp: build_lstm_model(hp, X_train), 
+                                 objective='val_loss', 
+                                 max_trials=50,
+                                 executions_per_trial=1)
+
+            # Tuning on dataset for the best hyperparameters
+            tuner.search(X_train, y_train, epochs=20, batch_size=32, validation_data=(X_test, y_test), 
+                         callbacks=[tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=1)])
+            best_hps = tuner.get_best_hyperparameters(num_trials=1)[0] # Pick best parameters 
+            print("Best LSTM parameters:", best_hps.values)
+
+            return best_hps
