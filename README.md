@@ -6,6 +6,7 @@
 - [What is Time Series Forecasting?](#what-is-time-series-forecasting)
 - [Project Overview](#project-overview)
 - [Machine Learning Methods](#machine-learning-methods)
+- [Deep Learning Methods](#deep-learning-methods)
 - [Installation](#installation)
 - [Usage Code](#usage)
 - [How to Use Optuna?](#how-to-use-optuna)
@@ -118,3 +119,123 @@ The following models are considered:
 - Provided an overview of the machine learning methods applied to the dataset for regression tasks.
 
 **Note:** All processes are enabled or disabled based on the configuration settings, allowing for flexibility in the analysis and model training pipeline.
+
+## Deep Learning Methods
+
+The implemented code comprises various deep learning methods, predominantly focusing on Long Short-Term Memory (LSTM) and Gated Recurrent Unit (GRU) models, including their combinations.
+
+> ### LSTM Model Building
+
+- Created via the build_lstm_model function, allowing hyperparameter tuning.
+- Configured with multiple LSTM layers, dropout regularization, and kernel regularization.
+- Optimized using the Adam optimizer with mean squared error loss.
+
+> ### GRU Model Building
+
+- Constructed through the build_gru_model function, also adjustable via hyperparameters.
+- Comprises GRU layers, dropout regularization, kernel regularization, and Adam optimizer with mean squared error loss.
+
+> ### Combined LSTM-GRU Model Building
+
+- Developed using the build_lstm_gru_model function, facilitating hyperparameter tuning.
+- Integrates both LSTM and GRU layers, dropout regularization, kernel regularization, and the Adam optimizer for mean squared error loss.
+
+> ### KerasTuner for Hyperparameter Optimization
+
+- Utilized within the KerasTuner class to tune hyperparameters for LSTM, GRU, and combined LSTM-GRU models.
+- Employs RandomSearch to explore hyperparameter spaces and identify optimal configurations for each model type.
+
+> ### Deep Learning Model Execution
+
+- Performed through the DLModels class, which enables the selection and execution of specific deep learning models based on configuration flags.
+- Facilitates training, validation, and prediction using LSTM, GRU, or combined LSTM-GRU architectures.
+- Trains models with the Adam optimizer, Nadam optimizer, and mean squared error loss.
+
+These methods allow for flexible model creation, tuning, and execution, catering to various sequence prediction tasks, particularly suitable for time series forecasting or sequential data analysis. The combination of LSTM and GRU architectures provides versatility and potential improvements in capturing temporal dependencies within the data, aiding in achieving accurate predictions for target variables.
+
+## Installation
+
+To get started with this project, follow these steps:
+
+1. Clone this repository to your local machine using Git:
+
+         git clone https://github.com/ahmetdzdrr/Time-Series_Forecasting-Electricity-Demand.git
+
+2. Install the required Python libraries by running:
+
+          pip install -r requirements.txt
+
+## Usage Code
+
+> ### Usage
+To run the project, follow these steps:
+
+- To use this code, you can customize its behavior by modifying the CFG class in the main script (multi_label_classification.ipynb). 
+
+- Each flag in the CFG class controls whether a specific functionality is enabled or disabled. Set the flags to True or False based on your requirements.
+
+- Open the Jupyter Notebook file (multi_label_classification.ipynb) in your Jupyter Notebook environment.
+
+- Run each cell in the notebook sequentially. The code in the notebook will process the data, perform the selected operations, and generate the desired output.
+
+> ### How to Use Optuna?
+
+- Optuna is a Python library for optimizing machine learning model hyperparameters. You can use it with various machine learning frameworks, including XGBoost, LightGBM (LGBM), and CatBoost. Here's a short guide on how to do that:
+
+>> ### Step 1: Install Optuna
+
+- You need to install Optuna in your Python environment. You can do this using pip:
+
+       pip install optuna
+
+>> ### Step 2: Import Optuna and the Machine Learning Library
+
+- In your Jupyter Notebook or Python script, import Optuna and the machine learning library you want to optimize (e.g., XGBoost, LGBM, or CatBoost).
+
+      import optuna
+      import xgboost as xgb
+      import lightgbm as lgb
+      from catboost import CatBoostClassifier
+
+>> ### Step 3: Define an Objective Function
+
+- Create an objective function that Optuna will optimize. This function takes an Optuna trial object as an argument and returns a score that you want to minimize or maximize. This score is typically a metric of your model's performance.
+
+Here's an example for optimizing the AUC score with XGBoost:
+
+      def objective(trial):
+          params = {
+              "objective": "binary:logistic",
+              "eval_metric": "auc",
+              "booster": trial.suggest_categorical("booster", ["gbtree", "gblinear", "dart"]),
+              "lambda": trial.suggest_float("lambda", 1e-8, 1.0, log=True),
+              # Add more hyperparameters to tune
+          }
+      
+       dtrain = xgb.DMatrix(X_train, label=y_train)
+       model = xgb.train(params, dtrain)
+       predictions = model.predict(dtest)
+      
+       auc = sklearn.metrics.roc_auc_score(y_test, predictions)
+       return auc
+       
+>> ### Step 4: Create an Optuna Study
+
+- Create an Optuna study to run the optimization. You can specify the optimization direction, e.g., "maximize" or "minimize" based on your chosen objective (e.g., AUC).
+
+    ```bash
+      study = optuna.create_study(direction="maximize")
+
+>> ### Step 5: Start the Optimization
+
+-Run the optimization process with a specified number of trials. Optuna will search for the best hyperparameters based on the objective function.
+    
+      study.optimize(objective, n_trials=100)
+      
+>> ### Step 6: Retrieve the Best Parameters
+
+- Once the optimization is complete, you can retrieve the best set of hyperparameters from the study object:
+
+      best_params = study.best_params
+
+- You can then use these best hyperparameters to train your final model with XGBoost, LGBM, or CatBoost.
