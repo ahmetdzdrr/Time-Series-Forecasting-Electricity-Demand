@@ -158,7 +158,7 @@ To get started with this project, follow these steps:
 
 1. Clone this repository to your local machine using Git:
 
-         git clone https://github.com/ahmetdzdrr/Time-Series_Forecasting-Electricity-Demand.git
+         git clone https://github.com/ahmetdzdrr/Time-Series-Forecasting-Electricity-Demand.git
 
 2. Install the required Python libraries by running:
 
