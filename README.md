@@ -169,11 +169,11 @@ To get started with this project, follow these steps:
 > ### Usage
 To run the project, follow these steps:
 
-- To use this code, you can customize its behavior by modifying the CFG class in the main script (multi_label_classification.ipynb). 
+- To use this code, you can customize its behavior by modifying the CFG class in the main script (electricty_demand.ipynb). 
 
 - Each flag in the CFG class controls whether a specific functionality is enabled or disabled. Set the flags to True or False based on your requirements.
 
-- Open the Jupyter Notebook file (multi_label_classification.ipynb) in your Jupyter Notebook environment.
+- Open the Jupyter Notebook files (electricty_demand.ipynb) in your Jupyter Notebook environment.
 
 - Run each cell in the notebook sequentially. The code in the notebook will process the data, perform the selected operations, and generate the desired output.
 
